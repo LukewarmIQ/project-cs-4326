@@ -8,6 +8,7 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 /.idea/*
+.idea/*
 /app/src/main/java/com/example/myapplication/APIKey
 .DS_Store
 /build
