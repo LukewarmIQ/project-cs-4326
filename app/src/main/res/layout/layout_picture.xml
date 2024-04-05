@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.myapplication.CameraActivity">
+    tools:context="com.example.myapplication.CameraActivity"
+    android:theme="@style/Theme.MyTheme">
 
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
@@ -20,6 +21,11 @@
         android:layout_height="126dp"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center|bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="17dp"
         android:drawableLeft="@drawable/ic_camera"
         android:padding="20dp"
@@ -29,6 +35,8 @@
         tools:ignore="MissingConstraints"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="#151F30"
+        android:textColor="#FFFFFF"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
