@@ -1,10 +1,15 @@
 package com.example.myapplication
 
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.widget.Button
 import androidx.activity.ComponentActivity
+import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -27,6 +32,7 @@ class CameraActivity : ComponentActivity() {
         fun onPictureTaken(directoryName: String)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_picture)
@@ -39,6 +45,12 @@ class CameraActivity : ComponentActivity() {
 
         captureButton.setOnClickListener {
             takePhoto()
+            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(200,
+                VibrationEffect.DEFAULT_AMPLITUDE
+            )
+            )
         }
     }
 
