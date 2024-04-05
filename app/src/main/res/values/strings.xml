@@ -3,5 +3,5 @@
     <string name="use_camera">Use Camera</string>
     <string name="use_file">Use File</string>
     <string name="capture">Capture</string>
-    <string name="view_past_results">View Past Results</string>
+    <string name="view_past_results">Recent</string>
 </resources>
