@@ -26,7 +26,7 @@
         android:id="@+id/buttonPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/captureImageFab"
+        android:layout_above="@+id/camera"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
@@ -55,7 +55,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/captureImageFab"
+        android:id="@+id/camera"
         android:layout_width="395dp"
         android:layout_height="126dp"
         android:layout_alignParentBottom="true"
