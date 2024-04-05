@@ -30,23 +30,21 @@ android:layout_above="@+id/buttonPanel">
 </FrameLayout>
 
 <LinearLayout
-android:id="@+id/buttonPanel"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_above="@+id/camera"
-android:gravity="center_horizontal"
-android:orientation="horizontal">
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:id="@+id/buttonPanel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/camera"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal">
 
 <Button
     android:id="@+id/gallery"
     android:layout_width="182dp"
     android:layout_height="100dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginLeft="16dp"
     android:layout_marginEnd="8dp"
-    android:layout_marginRight="8dp"
     android:layout_marginBottom="8dp"
-    android:layout_alignParentBottom="true"
     android:background="#151F30"
     android:gravity="center"
     android:text="@string/use_file"
@@ -64,9 +62,6 @@ android:orientation="horizontal">
     android:layout_width="182dp"
     android:layout_height="100dp"
     android:layout_marginStart="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginRight="16dp"
     android:layout_marginBottom="8dp"
     android:background="#151F30"
     android:text="@string/view_past_results"
