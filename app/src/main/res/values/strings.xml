@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">ShopScanner</string>
     <string name="use_camera">Use Camera</string>
     <string name="use_file">Use File</string>
     <string name="view_past_results">View Past Results</string>
