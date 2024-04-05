@@ -1,13 +1,19 @@
 [versions]
 agp = "8.3.0"
 annotation = "1.0.0"
+appcompatVersion = "1.2.0"
 cameraCamera2 = "1.3.2"
+constraintlayoutVersion = "2.0.4"
+coreKtxVersion = "1.3.2"
+exifinterface = "1.3.7"
 glide = "4.12.0"
 kotlin = "1.9.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
+kotlinStdlib = "1.9.0"
+kotlinxCoroutinesCore = "1.7.1"
 lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.7.0"
 composeBom = "2023.08.00"
@@ -15,17 +21,25 @@ appcompat = "1.6.1"
 cameraCore = "1.3.2"
 cameraLifecycle = "1.3.2"
 constraintlayout = "2.1.4"
+lifecycleRuntimeKtxVersion = "2.3.0"
+material = "1.11.0"
 recyclerview = "1.3.2"
 tensorflowLiteGpuDelegatePlugin = "0.4.0"
 tensorflowLiteGpuVersion = "2.9.0"
 tensorflowLiteMetadata = "0.1.0"
 tensorflowLiteTaskVision = "0.4.0"
+tensorflowLiteTaskVisionVersion = "0.3.1"
 
 [libraries]
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
+androidx-appcompat-v120 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCamera2" }
+androidx-constraintlayout-v204 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-ktx-v132 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
+androidx-exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifinterface" }
+androidx-lifecycle-runtime-ktx-v230 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -46,10 +60,14 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraCore" }
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycle" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdlib" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
 tensorflow-lite-gpu-delegate-plugin = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "tensorflowLiteGpuDelegatePlugin" }
 tensorflow-lite-gpu-v290 = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLiteGpuVersion" }
 tensorflow-lite-metadata = { module = "org.tensorflow:tensorflow-lite-metadata", version.ref = "tensorflowLiteMetadata" }
 tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteTaskVision" }
+tensorflow-lite-task-vision-v031 = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteTaskVisionVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
