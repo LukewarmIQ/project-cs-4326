@@ -2,12 +2,14 @@ package com.example.myapplication
 
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
 import android.widget.Button
+import android.widget.ToggleButton
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
@@ -27,6 +29,7 @@ class CameraActivity : ComponentActivity() {
     private lateinit var previewView: PreviewView
     private lateinit var captureButton: Button
     private var imageCapture: ImageCapture? = null
+    private lateinit var mediaPlayer: MediaPlayer
 
     interface ImageCaptureCallback {
         fun onPictureTaken(directoryName: String)
@@ -45,6 +48,8 @@ class CameraActivity : ComponentActivity() {
 
         captureButton.setOnClickListener {
             takePhoto()
+            mediaPlayer = MediaPlayer.create(this, R.raw.camera_shutter)
+            mediaPlayer.start()
             val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(
                 VibrationEffect.createOneShot(200,
@@ -133,10 +138,27 @@ class CameraActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        mediaPlayer.release()
         cameraExecutor.shutdown()
     }
 
     companion object {
         private const val TAG = "CameraXBasic"
+    }
+
+    override fun onBackPressed() {
+        try {
+            mediaPlayer?.release() // Use safe call operator to avoid NullPointerException
+            cameraExecutor?.shutdown() // Use safe call operator to avoid NullPointerException
+        } catch (e: IllegalStateException) {
+            // Handle IllegalStateException appropriately, e.g., log the error
+        }
+
+        // Custom back button behavior
+        // Return to main menu, remove other back button options from the stack.
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
+        finish()
     }
 }
