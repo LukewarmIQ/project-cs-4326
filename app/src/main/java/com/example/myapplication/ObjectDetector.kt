@@ -229,9 +229,6 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
                 Log.e("TTS", "Language not Supported")
             } else {
                 var ttsText = text
-                if(ttsText == ""){
-                    ttsText = "No Object Detected"
-                }
                 textToSpeech.speak(ttsText, TextToSpeech.QUEUE_ADD, null, null)
             }
         }
