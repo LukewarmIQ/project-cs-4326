@@ -85,7 +85,7 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
         val centerY = image.height / 2
         val thresholdDistance = minOf(image.width, image.height) * THRESHOLD_DISTANCE_RATIO
 
-        val resultToDisplay = results.filter { detection ->
+        var resultsToDisplay = results.filter { detection ->
             val boxCenterX = (detection.boundingBox.left + detection.boundingBox.right) / 2
             val boxCenterY = (detection.boundingBox.top + detection.boundingBox.bottom) / 2
             val distanceToCenter = Math.sqrt(
@@ -102,8 +102,13 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
             DetectionResult(detection.boundingBox, text)
         }
 
+        // Step 5: If nothing is detected, say so
+        if(resultsToDisplay.isEmpty() || results.isEmpty()){
+            resultsToDisplay = listOf(DetectionResult(RectF(0F,0F,0F,0F), "No Object Detected"))
+        }
+
         // Draw the detection result on the bitmap and show it.
-        val imgWithResult = drawDetectionResult(bitmap, resultToDisplay)
+        val imgWithResult = drawDetectionResult(bitmap, resultsToDisplay)
         runOnUiThread {
             inputImageView.setImageBitmap(imgWithResult)
         }
