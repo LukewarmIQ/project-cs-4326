@@ -45,8 +45,6 @@ class MainActivity : ComponentActivity() {
                 } else {
                     soundToggle.text = "Sound Effects: Off"
                 }
-                mediaPlayer = MediaPlayer.create(this, R.raw.pickup)
-                mediaPlayer.start()
             }
         }
 
