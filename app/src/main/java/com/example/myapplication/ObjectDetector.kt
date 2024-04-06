@@ -26,6 +26,9 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     companion object {
         private const val MAX_FONT_SIZE = 300F
+        // This seems like a good threshold but can be tweaked to allow for less
+        // or more objects to be detected
+        private const val THRESHOLD_DISTANCE_RATIO = 0.15
     }
 
     private lateinit var inputImageView: ImageView
@@ -76,14 +79,27 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         // Step 3: feed given image to the model and print the detection result
         val results = detector.detect(image)
-        val resultToDisplay = results.map {
+
+        // Step 4: filter out any objects not in center of image
+        val centerX = image.width / 2
+        val centerY = image.height / 2
+        val thresholdDistance = minOf(image.width, image.height) * THRESHOLD_DISTANCE_RATIO
+
+        val resultToDisplay = results.filter { detection ->
+            val boxCenterX = (detection.boundingBox.left + detection.boundingBox.right) / 2
+            val boxCenterY = (detection.boundingBox.top + detection.boundingBox.bottom) / 2
+            val distanceToCenter = Math.sqrt(
+                ((centerX - boxCenterX) * (centerX - boxCenterX) + (centerY - boxCenterY) * (centerY - boxCenterY)).toDouble()
+            )
+            distanceToCenter < thresholdDistance
+        }.map {detection ->
             // Get the top-1 category and craft the display text
-            val category = it.categories.first()
+            val category = detection.categories.first()
             val text = "${category.label}"
             // val score = category.score.times(100).toInt()
 
             // Create a data object to display the detection result
-            DetectionResult(it.boundingBox, text)
+            DetectionResult(detection.boundingBox, text)
         }
 
         // Draw the detection result on the bitmap and show it.
@@ -146,6 +162,7 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun drawDetectionResult(
         bitmap: Bitmap,
         detectionResults: List<DetectionResult>
+
     ): Bitmap {
         val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(outputBitmap)
