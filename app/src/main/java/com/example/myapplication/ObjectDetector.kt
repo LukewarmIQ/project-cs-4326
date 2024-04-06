@@ -25,7 +25,7 @@ import java.util.Locale
 class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     companion object {
-        private const val MAX_FONT_SIZE = 182F
+        private const val MAX_FONT_SIZE = 300F
     }
 
     private lateinit var inputImageView: ImageView
@@ -76,15 +76,16 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         // Step 3: feed given image to the model and print the detection result
         val results = detector.detect(image)
-
         val resultToDisplay = results.map {
             // Get the top-1 category and craft the display text
             val category = it.categories.first()
-            val text = "${category.label}, ${category.score.times(100).toInt()}%"
+            val text = "${category.label}"
+            // val score = category.score.times(100).toInt()
 
             // Create a data object to display the detection result
             DetectionResult(it.boundingBox, text)
         }
+
         // Draw the detection result on the bitmap and show it.
         val imgWithResult = drawDetectionResult(bitmap, resultToDisplay)
         runOnUiThread {
@@ -190,6 +191,7 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        super.onBackPressed()
         // Custom back button behavior
         // Return to main menu, remove other back button options from the stack.
         val intent = Intent(this, MainActivity::class.java)
@@ -204,8 +206,11 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS", "Language not Supported")
             } else {
-                val modifiedString = text.replaceAfter(",", "")
-                textToSpeech.speak(modifiedString, TextToSpeech.QUEUE_ADD, null, null)
+                var ttsText = text
+                if(ttsText == ""){
+                    ttsText = "No Object Detected"
+                }
+                textToSpeech.speak(ttsText, TextToSpeech.QUEUE_ADD, null, null)
             }
         }
         catch (e: Exception) {

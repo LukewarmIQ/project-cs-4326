@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.myapplication">
 
     <application
         android:allowBackup="true"
@@ -10,7 +11,7 @@
         android:label="ShopScanner"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light"
+        android:theme="@style/Theme.MyTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
@@ -27,10 +28,6 @@
             android:theme="@style/Theme.AppCompat.Light">
         </activity>
         <activity android:name=".GallerySelect"
-            android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light">
-        </activity>
-        <activity android:name=".APIResult"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light">
         </activity>
@@ -53,6 +50,7 @@
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
 
 </manifest>

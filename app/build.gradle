@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id "de.undercouch.download" version "4.0.0"
+    id 'kotlin-android'
 }
 
 android {
@@ -81,4 +82,13 @@ dependencies {
     androidTestImplementation libs.androidx.ui.test.junit4
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest
+    implementation libs.kotlin.stdlib
+    implementation libs.androidx.core.ktx.v132
+    implementation libs.androidx.appcompat.v120
+    implementation libs.material
+    implementation libs.androidx.constraintlayout.v204
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.androidx.lifecycle.runtime.ktx.v230
+    implementation libs.androidx.exifinterface
+    implementation libs.tensorflow.lite.task.vision.v031
 }
