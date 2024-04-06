@@ -1,0 +1,17 @@
+<!-- custom_toggle.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- When toggle is checked (ON state) -->
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#151F30"/> <!-- Color when toggle is ON -->
+            <corners android:radius="20dp"/> <!-- Adjust corner radius as needed -->
+        </shape>
+    </item>
+    <!-- When toggle is unchecked (OFF state) -->
+    <item android:state_checked="false">
+        <shape android:shape="rectangle">
+            <solid android:color="#CC5500"/> <!-- Color when toggle is OFF -->
+            <corners android:radius="20dp"/> <!-- Adjust corner radius as needed -->
+        </shape>
+    </item>
+</selector>

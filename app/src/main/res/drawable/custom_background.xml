@@ -1,0 +1,12 @@
+<!-- custom_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:type="linear"
+        android:startX="0"
+        android:startY="0"
+        android:endX="1"
+        android:endY="1"
+        android:endColor="#72C5CC"
+        android:startColor="#569399"
+        android:angle="90"/> <!-- Linear gradient from orange to yellow at 45 degrees -->
+</shape>
