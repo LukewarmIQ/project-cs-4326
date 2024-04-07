@@ -30,7 +30,6 @@ class CameraActivity : ComponentActivity() {
     private lateinit var captureButton: Button
     private var imageCapture: ImageCapture? = null
     private lateinit var mediaPlayer: MediaPlayer
-    val soundToggle: ToggleButton = findViewById(R.id.sound_toggle)
 
     interface ImageCaptureCallback {
         fun onPictureTaken(directoryName: String)
@@ -41,6 +40,7 @@ class CameraActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_picture)
 
+
         previewView = findViewById(R.id.previewView)
         captureButton = findViewById(R.id.captureButton)
 
@@ -49,10 +49,8 @@ class CameraActivity : ComponentActivity() {
 
         captureButton.setOnClickListener {
             takePhoto()
-            if(soundToggle.isChecked) {
-                mediaPlayer = MediaPlayer.create(this, R.raw.camera_shutter)
-                mediaPlayer.start()
-            }
+            mediaPlayer = MediaPlayer.create(this, R.raw.camera_shutter)
+            mediaPlayer.start()
             val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(
                 VibrationEffect.createOneShot(200,
