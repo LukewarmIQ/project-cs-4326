@@ -16,19 +16,24 @@ import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import android.speech.tts.TextToSpeech
+import android.util.Log
+import java.util.Locale
 
-
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
 
     private val permissions = arrayOf(Manifest.permission.CAMERA)
     private val requestCode = 101
     private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var textToSpeech: TextToSpeech
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_menu)
+
+        textToSpeech = TextToSpeech(this, this)
 
         val button1: Button = findViewById(R.id.camera)
         val button2: Button = findViewById(R.id.gallery)
@@ -45,8 +50,7 @@ class MainActivity : ComponentActivity() {
                 } else {
                     soundToggle.text = "Sound Effects: Off"
                 }
-                mediaPlayer = MediaPlayer.create(this, R.raw.pickup)
-                mediaPlayer.start()
+                speak(soundToggle.text as String)
             }
         }
 
@@ -96,8 +100,12 @@ class MainActivity : ComponentActivity() {
 
     // Override onDestroy method to release MediaPlayer
     override fun onDestroy() {
-        super.onDestroy()
+        if (textToSpeech.isSpeaking) {
+            textToSpeech.stop()
+        }
+        textToSpeech.shutdown()
         mediaPlayer.release()
+        super.onDestroy()
     }
 
     private fun checkSoundToggle(soundToggle: ToggleButton) {
@@ -107,6 +115,21 @@ class MainActivity : ComponentActivity() {
             } else {
                 soundToggle.text = "Sound Effects: Off"
             }
+        }
+    }
+
+    private fun speak(text: String) {
+        val result = textToSpeech.setLanguage(Locale.US)
+        try {
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "Language not Supported")
+            } else {
+                var ttsText = text
+                textToSpeech.speak(ttsText, TextToSpeech.QUEUE_ADD, null, null)
+            }
+        }
+        catch (e: Exception) {
+            Log.e("TTS", "TTS failed to send message")
         }
     }
 
@@ -127,6 +150,15 @@ class MainActivity : ComponentActivity() {
                 notGrantedPermissions.toTypedArray(),
                 requestCode
             )
+        }
+    }
+
+    override fun onInit(status: Int) {
+        // Implement your initialization logic here
+        if (status == TextToSpeech.SUCCESS) {
+            // Text-to-speech initialization successful
+        } else {
+            Log.e("TTS", "TTS not initialized")
         }
     }
 

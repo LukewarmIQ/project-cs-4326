@@ -40,6 +40,7 @@ class CameraActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_picture)
 
+
         previewView = findViewById(R.id.previewView)
         captureButton = findViewById(R.id.captureButton)
 

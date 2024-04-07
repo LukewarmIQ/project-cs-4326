@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.lifecycleScope
@@ -26,11 +27,15 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     companion object {
         private const val MAX_FONT_SIZE = 300F
+        // This seems like a good threshold but can be tweaked to allow for less
+        // or more objects to be detected
+        private const val THRESHOLD_DISTANCE_RATIO = 0.15
     }
 
     private lateinit var inputImageView: ImageView
     private lateinit var currentPhotoPath: String
     private lateinit var textToSpeech: TextToSpeech
+    private lateinit var largeTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +47,7 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         // Find views
         inputImageView = findViewById<ImageView>(R.id.imageView)
+        largeTextView = findViewById<TextView>(R.id.largeTextView)
 
         // Initialize text to speech module
         textToSpeech = TextToSpeech(this, this)
@@ -70,24 +76,42 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
             .build()
         val detector = ObjectDetector.createFromFileAndOptions(
             this, // the application context
-            "model.tflite", // must be same as the filename in assets folder
+            "model.tflite", // basic model
             options
         )
 
         // Step 3: feed given image to the model and print the detection result
         val results = detector.detect(image)
-        val resultToDisplay = results.map {
+
+        // Step 4: filter out any objects not in center of image
+        val centerX = image.width / 2
+        val centerY = image.height / 2
+        val thresholdDistance = minOf(image.width, image.height) * THRESHOLD_DISTANCE_RATIO
+
+        var resultsToDisplay = results.filter { detection ->
+            val boxCenterX = (detection.boundingBox.left + detection.boundingBox.right) / 2
+            val boxCenterY = (detection.boundingBox.top + detection.boundingBox.bottom) / 2
+            val distanceToCenter = Math.sqrt(
+                ((centerX - boxCenterX) * (centerX - boxCenterX) + (centerY - boxCenterY) * (centerY - boxCenterY)).toDouble()
+            )
+            distanceToCenter < thresholdDistance
+        }.map {detection ->
             // Get the top-1 category and craft the display text
-            val category = it.categories.first()
+            val category = detection.categories.first()
             val text = "${category.label}"
             // val score = category.score.times(100).toInt()
 
             // Create a data object to display the detection result
-            DetectionResult(it.boundingBox, text)
+            DetectionResult(detection.boundingBox, text)
+        }
+
+        // Step 5: If nothing is detected, say so
+        if(resultsToDisplay.isEmpty() || results.isEmpty()){
+            resultsToDisplay = listOf(DetectionResult(RectF(0F,0F,0F,0F), "No Object Detected"))
         }
 
         // Draw the detection result on the bitmap and show it.
-        val imgWithResult = drawDetectionResult(bitmap, resultToDisplay)
+        val imgWithResult = drawDetectionResult(bitmap, resultsToDisplay)
         runOnUiThread {
             inputImageView.setImageBitmap(imgWithResult)
         }
@@ -146,6 +170,7 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun drawDetectionResult(
         bitmap: Bitmap,
         detectionResults: List<DetectionResult>
+
     ): Bitmap {
         val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(outputBitmap)
@@ -160,31 +185,13 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
             val box = it.boundingBox
             canvas.drawRect(box, pen)
 
-
-            val tagSize = Rect(0, 0, 0, 0)
-
-            // calculate the right font size
-            pen.style = Paint.Style.FILL_AND_STROKE
-            pen.color = Color.RED
-            pen.strokeWidth = 4F
-
-            pen.textSize = MAX_FONT_SIZE
-            pen.getTextBounds(it.text, 0, it.text.length, tagSize)
-            val fontSize: Float = pen.textSize * box.width() / tagSize.width()
-
-            // adjust the font size so texts are inside the bounding box
-            if (fontSize < pen.textSize) pen.textSize = fontSize
-
-            var margin = (box.width() - tagSize.width()) / 2.0F
-            if (margin < 0F) margin = 0F
-
             // Text-to-speech the results
             speakResults(it.text)
 
-            canvas.drawText(
-                it.text, box.left + margin,
-                box.top + tagSize.height().times(1F), pen
-            )
+            runOnUiThread {
+                largeTextView.text = it.text // Update largeTextView text here
+            }
+
         }
         return outputBitmap
     }
@@ -207,9 +214,6 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
                 Log.e("TTS", "Language not Supported")
             } else {
                 var ttsText = text
-                if(ttsText == ""){
-                    ttsText = "No Object Detected"
-                }
                 textToSpeech.speak(ttsText, TextToSpeech.QUEUE_ADD, null, null)
             }
         }
