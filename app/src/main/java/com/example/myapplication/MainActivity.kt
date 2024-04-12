@@ -56,10 +56,13 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
 
         button1.setOnClickListener {
             // Take picture with camera
-            startActivity(Intent(this, CameraActivity::class.java))
+            val intent = Intent(this, CameraActivity::class.java)
+            intent.putExtra("SoundEnabled", soundToggle.isChecked)
+            startActivity(intent)
+
             // Play sound effect
+            mediaPlayer = MediaPlayer.create(this, R.raw.camera_start)
             if(soundToggle.isChecked) {
-                mediaPlayer = MediaPlayer.create(this, R.raw.camera_start)
                 mediaPlayer.start()
             }
             // Vibrate the phone

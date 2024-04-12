@@ -39,7 +39,7 @@ class CameraActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_picture)
-
+        val soundToggle = intent.getBooleanExtra("SoundEnabled", false)
 
         previewView = findViewById(R.id.previewView)
         captureButton = findViewById(R.id.captureButton)
@@ -50,7 +50,9 @@ class CameraActivity : ComponentActivity() {
         captureButton.setOnClickListener {
             takePhoto()
             mediaPlayer = MediaPlayer.create(this, R.raw.camera_shutter)
-            mediaPlayer.start()
+            if (soundToggle) {
+                mediaPlayer.start()
+            }
             val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(
                 VibrationEffect.createOneShot(200,
@@ -148,9 +150,10 @@ class CameraActivity : ComponentActivity() {
     }
 
     override fun onBackPressed() {
+        super.onBackPressed()
         try {
-            mediaPlayer?.release() // Use safe call operator to avoid NullPointerException
-            cameraExecutor?.shutdown() // Use safe call operator to avoid NullPointerException
+            mediaPlayer.release() // Use safe call operator to avoid NullPointerException
+            cameraExecutor.shutdown() // Use safe call operator to avoid NullPointerException
         } catch (e: IllegalStateException) {
             // Handle IllegalStateException appropriately, e.g., log the error
         }
