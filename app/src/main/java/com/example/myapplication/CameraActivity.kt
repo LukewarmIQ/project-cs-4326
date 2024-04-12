@@ -152,8 +152,8 @@ class CameraActivity : ComponentActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         try {
-            mediaPlayer.release() // Use safe call operator to avoid NullPointerException
-            cameraExecutor.shutdown() // Use safe call operator to avoid NullPointerException
+            mediaPlayer?.release() // Use safe call operator to avoid NullPointerException
+            cameraExecutor?.shutdown() // Use safe call operator to avoid NullPointerException
         } catch (e: IllegalStateException) {
             // Handle IllegalStateException appropriately, e.g., log the error
         }
