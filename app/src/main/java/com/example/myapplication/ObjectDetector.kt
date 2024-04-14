@@ -76,7 +76,7 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
             .build()
         val detector = ObjectDetector.createFromFileAndOptions(
             this, // the application context
-            "beans.tflite", // basic model
+            "beans.tflite", // cans model
             options
         )
         val detectorBase = ObjectDetector.createFromFileAndOptions(
@@ -111,28 +111,32 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         // Step 5: If nothing is detected, try base model
-        if(resultsToDisplay.isEmpty() || results.isEmpty()) {
-            val resultsBase = detectorBase.detect(image)
-            resultsToDisplay = resultsBase.filter { detection ->
-                val boxCenterX = (detection.boundingBox.left + detection.boundingBox.right) / 2
-                val boxCenterY = (detection.boundingBox.top + detection.boundingBox.bottom) / 2
-                val distanceToCenter = Math.sqrt(
-                    ((centerX - boxCenterX) * (centerX - boxCenterX) + (centerY - boxCenterY) * (centerY - boxCenterY)).toDouble()
-                )
-                distanceToCenter < thresholdDistance
-            }.map { detection ->
-                // Get the top-1 category and craft the display text
-                val category = detection.categories.first()
-                val text = "${category.label}"
-                // val score = category.score.times(100).toInt()
+        val resultsBase = detectorBase.detect(image)
+        var resultsToDisplayBase = resultsBase.filter { detection ->
+            val boxCenterX = (detection.boundingBox.left + detection.boundingBox.right) / 2
+            val boxCenterY = (detection.boundingBox.top + detection.boundingBox.bottom) / 2
+            val distanceToCenter = Math.sqrt(
+                ((centerX - boxCenterX) * (centerX - boxCenterX) + (centerY - boxCenterY) * (centerY - boxCenterY)).toDouble()
+            )
+            distanceToCenter < thresholdDistance
+        }.map { detection ->
+            // Get the top-1 category and craft the display text
+            val category = detection.categories.first()
+            val text = "${category.label}"
+            // val score = category.score.times(100).toInt()
 
-                // Create a data object to display the detection result
-                DetectionResult(detection.boundingBox, text)
-            }
+            // Create a data object to display the detection result
+            DetectionResult(detection.boundingBox, text)
         }
-        // Else say nothing detected
-        if(resultsToDisplay.isEmpty() || results.isEmpty()){
-            resultsToDisplay = listOf(DetectionResult(RectF(0F,0F,0F,0F), "No Object Detected"))
+
+        // Check other model
+        if(resultsToDisplay.isEmpty() || results.isEmpty()) {
+            if (resultsToDisplayBase.isEmpty() || resultsBase.isEmpty()) {
+                resultsToDisplay =
+                    listOf(DetectionResult(RectF(0F, 0F, 0F, 0F), "No Object Detected"))
+            } else {
+                resultsToDisplay = resultsToDisplayBase
+            }
         }
 
         // Draw the detection result on the bitmap and show it.
