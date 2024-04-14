@@ -13,7 +13,7 @@ To install the application on your Android device, follow these steps:
 5. Tap on the APK file to begin the installation process.  
 6. Follow the on-screen instructions to complete the installation.  
 
-7. ## Dependencies  
+## Dependencies  
 This application relies on the following dependencies:  
 - Android SDK  
 - TensorFlow Lite for Android  
