@@ -7,7 +7,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
-import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -104,10 +103,10 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
             // Get the top-1 category and craft the display text
             val category = detection.categories.first()
             val text = "${category.label}"
-            // val score = category.score.times(100).toInt()
+            val score = category.score.times(100).toInt()
 
             // Create a data object to display the detection result
-            DetectionResult(detection.boundingBox, text)
+            DetectionResult(detection.boundingBox, text, score)
         }
 
         // Step 5: If nothing is detected, try base model
@@ -123,19 +122,29 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
             // Get the top-1 category and craft the display text
             val category = detection.categories.first()
             val text = "${category.label}"
-            // val score = category.score.times(100).toInt()
+            val score = category.score.times(100).toInt()
 
             // Create a data object to display the detection result
-            DetectionResult(detection.boundingBox, text)
+            DetectionResult(detection.boundingBox, text, score)
         }
 
         // Check other model
         if(resultsToDisplay.isEmpty() || results.isEmpty()) {
             if (resultsToDisplayBase.isEmpty() || resultsBase.isEmpty()) {
                 resultsToDisplay =
-                    listOf(DetectionResult(RectF(0F, 0F, 0F, 0F), "No Object Detected"))
+                    listOf(DetectionResult(RectF(0F, 0F, 0F, 0F), "No Object Detected", 0))
             } else {
                 resultsToDisplay = resultsToDisplayBase
+            }
+        }
+        // Pick model with best score
+        if(!resultsToDisplay.isEmpty() && !resultsToDisplayBase.isEmpty()){
+            val highestScoreResult = resultsToDisplay.maxByOrNull{ it.score }
+            val highestScoreResultBase = resultsToDisplayBase.maxByOrNull{ it.score }
+            if (highestScoreResult != null && highestScoreResultBase != null) {
+                if (highestScoreResult.score < highestScoreResultBase.score) {
+                    resultsToDisplay = resultsToDisplayBase
+                }
             }
         }
 
@@ -274,4 +283,4 @@ class ObjectDetector : AppCompatActivity(), TextToSpeech.OnInitListener {
  * DetectionResult
  *      A class to store the visualization info of a detected object.
  */
-data class DetectionResult(val boundingBox: RectF, val text: String)
+data class DetectionResult(val boundingBox: RectF, val text: String, val score: Int)
