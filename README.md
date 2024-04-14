@@ -2,7 +2,7 @@
 ![image](https://github.com/LukewarmIQ/project-cs-4326/assets/24831044/af9db821-8d59-497f-8d6d-b6f0d0f2f30b)
 
 ## Overview
-This Android application is designed to perform object detection using a trained machine learning model. It allows users to capture images on their device and display the item that appears in the picture. Shopscanner can also detect object from the users photo library and maintains a copy of the users most recent images taken within the app.   
+This Android application is designed to perform object detection using a trained machine learning model. It allows users to capture images on their device and display the item that appears in the picture. Shopscanner can also detect objects from the users photo library and maintains a copy of the users most recent images taken within the app.   
 
 ## Installation  
 To install the application on your Android device, follow these steps:  
